@@ -27,6 +27,8 @@ public class FoodEat2 extends JFrame{
 	private Image backgroundImage = new ImageIcon(FoodEat2.class.getResource("../images2/BS.jpg")).getImage();
 	private Image JMS = new ImageIcon(FoodEat2.class.getResource("../images2/stone.jpg")).getImage();
 	private Image CH = new ImageIcon(FoodEat2.class.getResource("../images2/CH2.jpg")).getImage();
+	private Image VT = new ImageIcon(FoodEat2.class.getResource("../images2/VT.jpg")).getImage();
+	
 	
 	
 	private int JMSY,JMSX;
@@ -36,6 +38,10 @@ public class FoodEat2 extends JFrame{
 	private int CHX, CHY;
 	private int CHWidth =  CH.getWidth(null);
 	private int CHHeight = CH.getHeight(null);
+	
+	private int VTX, VTY;
+	private int VTWidth =  VT.getWidth(null);
+	private int VTHeight = VT.getHeight(null);
 	
 	private int score;
 	
@@ -87,10 +93,13 @@ public class FoodEat2 extends JFrame{
 			}		
 		});
 		Init();
+		Init2();
+		
+		
 		while(true) {
 			
 			try {
-				Thread.sleep(20);
+				Thread.sleep(1d);
 			}catch(InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -101,14 +110,35 @@ public class FoodEat2 extends JFrame{
 	}
 	
 	public void Init() {
-		score = 0;		
+		score = 100;	
+		
 		JMSX = (500 - JMSWidth)/2;
 		JMSY = (500 - JMSHeight)/2;
 		
 		CHX = (int)(Math.random()*470)+30;
-		CHY = 30 + (int)(Math.random()*470);	// 점수 초기화, 플레이어와 코인 위치 설정
+		CHY = 30 + (int)(Math.random()*470);	// 점수 초기화, 플레이어와 닭다리 위치 설정
 		System.out.println(CHX+"/"+CHY);
+		
+		
+		
+		
 				
+	}
+	
+	
+	public void Init2(){
+		
+		
+			JMSX = (500 - JMSWidth)/2;
+			JMSY = (500 - JMSHeight)/2;
+			
+			
+			VTX = (int)(Math.random()*470)+30;
+			VTY = 30 + (int)(Math.random()*470);	// 점수 초기화, 플레이어와 닭다리 위치 설정
+			System.out.println(VTX+"/"+VTY);
+			
+		
+			
 	}
 	
 	public void KeyProcess() {
@@ -120,13 +150,44 @@ public class FoodEat2 extends JFrame{
 	
 	public void crashCheck() {
 		if(JMSX + JMSWidth >= CHX && CHX + CHWidth >= JMSX && JMSY + JMSHeight >= CHY && CHY + CHHeight >= JMSY) {
-			score+=100;
+		
+			
+			score+=2;
+			
+			if(score>=100) {
+				score=0;
+				System.exit(CHHeight);
+			}
+
+			
 			CHX = (int)(Math.random()*470)+30;
 			CHY = 30 + (int)(Math.random()*470);
+				
 		}
+		
+		
+		if(JMSX + JMSWidth >= VTX && VTX + VTWidth >= JMSX && JMSY + JMSHeight >= VTY && VTY + VTHeight >= JMSY) {
+		
+			score-=30;
+			System.out.println("score: " + score);
+			if(score <= 0) {
+				System.out.println("exitFlag");
+				System.exit(CHHeight);
+			}
+			
+			
+			VTX = (int)(Math.random()*470)+30;
+			VTY = 30 + (int)(Math.random()*470);
+				
+		}
+		
+		
+		
 			
 	}
 	
+	
+
 	
 	public void playSound(String pathName, boolean isLoop) {
 		try {
@@ -152,7 +213,7 @@ public class FoodEat2 extends JFrame{
 	
 	
 	public void paint(Graphics g) {
-		bufferImage = createImage(600,600);
+		bufferImage = createImage(800,600);
 		screenGraphic = bufferImage.getGraphics();
 		screenDraw(screenGraphic);
 		g.drawImage(bufferImage, 0, 0, null);
@@ -164,15 +225,21 @@ public class FoodEat2 extends JFrame{
 		g.drawImage(backgroundImage, 0,0, null);
 		g.drawImage(JMS, JMSX,JMSY, null);
 		g.drawImage(CH, CHX,CHY, null);
+		g.drawImage(VT, VTX,VTY, null);
+		
+		
+		
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Korea", Font.BOLD, 30));
-		g.drawString("닭다리 수 : "+score, 30,80);
+		g.drawString("몸무게 : "+score+"kg", 30,80);
+		
+		g.setColor(Color.BLUE);
+		g.setFont(new Font("Korea", Font.BOLD, 15));
+		g.drawString("민석이는 입보다 머리를 좋아해요", 360,80);
 		this.repaint();
 		
 	}
 	
-	
-
 	
 
 	public static void main(String[] args) {
